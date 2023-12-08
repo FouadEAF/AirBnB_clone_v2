@@ -8,11 +8,11 @@ mkdir -p /data/web_static/shared/
 echo "Hello world!" > /data/web_static/releases/test/index.html
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 sudo chown -R ubuntu:ubuntu /data/
-sudo sed -i '38i\\
-     \tlocation /hbnb_static/ {\
-     \t\talias /data/web_static/current/;\
-     \t\tautoindex off;\
-     \t}\
+sudo sed -i '38i\
+     location /hbnb_static/ {\
+         alias /data/web_static/current/;\
+         autoindex off;\
+     }\
      ' /etc/nginx/sites-available/default
 sudo service nginx restart
 exit 0
