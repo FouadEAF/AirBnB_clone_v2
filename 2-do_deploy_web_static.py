@@ -1,9 +1,7 @@
 #!/usr/bin/python3
 """ Function that compress a folder """
-from datetime import datetime
-from fabric.api import *
-import shlex
-import os
+from fabric.api import put, run, env
+from os.path import exists
 
 
 env.hosts = ['54.162.36.27', '52.3.246.49']
@@ -11,30 +9,21 @@ env.user = "ubuntu"
 
 
 def do_deploy(archive_path):
-    """ Deploy """
-    if not os.path.exists(archive_path):
+    """ distributes an archive to the web servers """
+    if exists(archive_path) is False:
         return False
     try:
-        name = archive_path.replace('/', ' ')
-        name = shlex.split(name)
-        name = name[-1]
-
-        wname = name.replace('.', ' ')
-        wname = shlex.split(wname)
-        wname = wname[0]
-
-        releases_path = os.path.join("/data/web_static/releases/", wname)
-        tmp_path = os.path.join("/tmp", name)
-
-        put(archive_path, "/tmp/")
-        run(f"mkdir -p {releases_path}")
-        run(f"tar -xzf {tmp_path} -C {releases_path}")
-        run(f"rm {tmp_path}")
-        run(f"mv {releases_path}web_static/* {releases_path}")
-        run(f"rm -rf {releases_path}web_static")
-        run(f"rm -rf /data/web_static/current")
-        run(f"ln -s {releases_path} /data/web_static/current")
-        print("New version deployed!")
+        file_n = archive_path.split("/")[-1]
+        no_ext = file_n.split(".")[0]
+        path = "/data/web_static/releases/"
+        put(archive_path, '/tmp/')
+        run('mkdir -p {}{}/'.format(path, no_ext))
+        run('tar -xzf /tmp/{} -C {}{}/'.format(file_n, path, no_ext))
+        run('rm /tmp/{}'.format(file_n))
+        run('mv {0}{1}/web_static/* {0}{1}/'.format(path, no_ext))
+        run('rm -rf {}{}/web_static'.format(path, no_ext))
+        run('rm -rf /data/web_static/current')
+        run('ln -s {}{}/ /data/web_static/current'.format(path, no_ext))
         return True
     except:
         return False
