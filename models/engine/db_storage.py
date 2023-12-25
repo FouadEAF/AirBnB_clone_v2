@@ -35,7 +35,7 @@ class DBStorage:
     def all(self, cls=None):
         """ Return a dictionary
             Return:
-                returns a dictionary of __object
+                return a dictionary of __object
         """
         dic = {}
         if cls:
@@ -75,5 +75,5 @@ class DBStorage:
         self.__session = Session()
 
     def close(self):
-        """ Calls remove() """
+        """ Call remove() """
         self.__session.close()

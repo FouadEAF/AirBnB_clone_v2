@@ -24,7 +24,7 @@ class FileStorage:
     def all(self, cls=None):
         """ Return a dictionary
             Return:
-                returns a dictionary of __object
+                return a dictionary of __object
         """
         dic = {}
         if cls:
@@ -39,7 +39,7 @@ class FileStorage:
             return self.__objects
 
     def new(self, obj):
-        """ Sets __object to given object
+        """ Set __object to given object
             Args:
                 obj: given object
         """
@@ -72,5 +72,5 @@ class FileStorage:
             del self.__objects[key]
 
     def close(self):
-        """ Calls reload() """
+        """ Call reload() """
         self.reload()
